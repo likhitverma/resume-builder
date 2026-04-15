@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Likhit Verma — Resume</title>
+<meta name="description" content="Resume of Likhit Verma, Senior Full Stack Engineer | MERN Stack Specialist"/>
+<meta name="author" content="Likhit Verma"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+
+<style>
+/* ─────────────────────────────────
+   TOOLBAR
+───────────────────────────────── */
+#toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #0f0f1e;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  font-family: 'DM Sans', sans-serif;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.4);
+}
+
+#toolbar .tb-brand {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a09db8;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+
+.tb-btn {
+  border: none;
+  padding: 7px 16px;
+  border-radius: 5px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+#btn-edit {
+  background: #6c63ff;
+  color: #fff;
+}
+#btn-edit:hover { background: #554de0; }
+#btn-edit.active {
+  background: #ff5c5c;
+  color: #fff;
+}
+#btn-edit.active:hover { background: #e04040; }
+
+#btn-save {
+  background: #22c55e;
+  color: #fff;
+  display: none;
+}
+#btn-save:hover { background: #16a34a; }
+#btn-save.visible { display: flex; }
+
+#btn-export {
+  background: #1a1a2e;
+  color: #e8e6f0;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+#btn-export:hover { background: #2e2e4e; }
+
+#btn-reset {
+  background: transparent;
+  color: #a09db8;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+#btn-reset:hover { color: #ff5c5c; border-color: #ff5c5c; }
+
+.tb-spacer { flex: 1; }
+
+#save-status {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 4px;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+#save-status.saved {
+  color: #22c55e;
+  background: rgba(34,197,94,0.12);
+}
+#save-status.unsaved {
+  color: #f59e0b;
+  background: rgba(245,158,11,0.12);
+}
+#save-status.saving {
+  color: #60a5fa;
+  background: rgba(96,165,250,0.12);
+}
+#save-status.hidden { display: none; }
+
+#edit-hint {
+  font-size: 0.7rem;
+  color: #6c63ff;
+  background: rgba(108,99,255,0.12);
+  padding: 5px 10px;
+  border-radius: 4px;
+  display: none;
+}
+#edit-hint.visible { display: block; }
+
+/* ─────────────────────────────────
+   EDIT MODE STYLES
+───────────────────────────────── */
+.resume-page.edit-mode [contenteditable="true"] {
+  outline: none;
+  border-radius: 3px;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.resume-page.edit-mode [contenteditable="true"]:hover {
+  background: rgba(108,99,255,0.08);
+  box-shadow: 0 0 0 2px rgba(108,99,255,0.2);
+}
+.resume-page.edit-mode [contenteditable="true"]:focus {
+  background: rgba(108,99,255,0.10);
+  box-shadow: 0 0 0 2px rgba(108,99,255,0.5);
+}
+
+/* Sidebar editable fields in dark context */
+.sidebar.edit-mode-sidebar [contenteditable="true"]:hover {
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.2);
+}
+.sidebar.edit-mode-sidebar [contenteditable="true"]:focus {
+  background: rgba(255,255,255,0.10);
+  box-shadow: 0 0 0 2px rgba(108,99,255,0.6);
+}
+
+/* ─────────────────────────────────
+   PAGE / LAYOUT
+───────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1a1a;
+  --ink-2: #3d3d3d;
+  --ink-3: #666;
+  --rule: #ddd;
+  --rule-light: #eee;
+  --sidebar-bg: #1a1a2e;
+  --sidebar-text: #e8e6f0;
+  --sidebar-muted: #a09db8;
+  --sidebar-rule: rgba(255,255,255,0.12);
+  --accent: #6c63ff;
+  --accent-light: #ede9ff;
+  --tag-bg: rgba(255,255,255,0.10);
+  --tag-text: #c8c4e8;
+  --font: 'DM Sans','Helvetica Neue',Arial,sans-serif;
+  --font-display: 'DM Serif Display',Georgia,serif;
+  --page-w: 900px;
+}
+
+html { font-size: 14px; -webkit-font-smoothing: antialiased; }
+
+body {
+  background: #d6d3cc;
+  font-family: var(--font);
+  padding: 0 0 60px;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.resume-page {
+  max-width: var(--page-w);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  grid-template-rows: auto 1fr;
+  background: #fff;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.16);
+  min-height: 1100px;
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 44px 28px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.s-name {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 400;
+  line-height: 1.15;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+.s-title {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sidebar-muted);
+}
+.s-section-label {
+  font-size: 0.64rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--sidebar-muted);
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--sidebar-rule);
+}
+.contact-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.contact-list li { display: flex; align-items: flex-start; gap: 9px; font-size: 0.76rem; color: var(--sidebar-text); line-height: 1.4; }
+.contact-list li .ico { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; opacity: 0.65; }
+.contact-list a { color: var(--sidebar-text); text-decoration: none; word-break: break-all; }
+.contact-list a:hover { color: #fff; text-decoration: underline; }
+
+.skill-group { margin-bottom: 14px; }
+.skill-group-label { font-size: 0.68rem; font-weight: 700; color: var(--sidebar-muted); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.08em; }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.skill-tag { background: var(--tag-bg); color: var(--tag-text); font-size: 0.7rem; padding: 3px 8px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.08); line-height: 1.4; }
+
+.s-edu-school { font-size: 0.8rem; font-weight: 600; color: #fff; line-height: 1.35; }
+.s-edu-degree { font-size: 0.73rem; color: var(--sidebar-muted); margin-top: 3px; line-height: 1.4; }
+.s-edu-meta { font-size: 0.7rem; color: var(--sidebar-muted); margin-top: 4px; }
+
+.lang-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.lang-list li { font-size: 0.76rem; color: var(--sidebar-text); display: flex; align-items: center; gap: 8px; }
+.lang-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+/* ─── MAIN HEADER ─── */
+.main-header {
+  grid-column: 2;
+  grid-row: 1;
+  background: #f7f6f3;
+  padding: 30px 38px 24px;
+  border-bottom: 1px solid var(--rule);
+}
+.summary-tagline { font-family: var(--font-display); font-size: 1.05rem; color: var(--ink); font-weight: 400; margin-bottom: 8px; }
+.summary-body { font-size: 0.825rem; color: var(--ink-2); line-height: 1.65; max-width: 560px; }
+
+/* ─── MAIN BODY ─── */
+.main-body { grid-column: 2; grid-row: 2; padding: 28px 38px 40px; }
+
+.section { margin-bottom: 28px; }
+.section-heading {
+  font-size: 0.64rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink-3);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-heading::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+.exp-entry { margin-bottom: 20px; }
+.exp-top { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 2px; margin-bottom: 1px; }
+.exp-company { font-size: 0.92rem; font-weight: 700; color: var(--ink); }
+.exp-location-date { font-size: 0.73rem; color: var(--ink-3); text-align: right; }
+.exp-role-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.exp-role { font-size: 0.8rem; font-weight: 500; color: var(--ink-2); }
+.role-badge { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; background: var(--accent-light); color: #4840c0; padding: 2px 7px; border-radius: 3px; }
+.exp-desc { font-size: 0.77rem; color: var(--ink-3); margin-bottom: 6px; line-height: 1.55; font-style: italic; }
+.exp-bullets { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.exp-bullets li { font-size: 0.79rem; color: var(--ink-2); line-height: 1.55; padding-left: 14px; position: relative; }
+.exp-bullets li::before { content: ''; position: absolute; left: 0; top: 8px; width: 5px; height: 1.5px; background: var(--accent); border-radius: 1px; }
+
+.exp-divider { border: none; border-top: 1px solid var(--rule-light); margin: 18px 0; }
+
+.achievements-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; }
+.ach-item { font-size: 0.79rem; color: var(--ink-2); padding-left: 14px; position: relative; line-height: 1.5; }
+.ach-item::before { content: ''; position: absolute; left: 0; top: 8px; width: 5px; height: 1.5px; background: var(--accent); border-radius: 1px; }
+
+/* ─── PRINT ─── */
+@media print {
+  body { background: white; padding: 0; }
+  #toolbar { display: none; }
+  .resume-page { box-shadow: none; max-width: 100%; min-height: unset; }
+  [contenteditable="true"] { outline: none !important; box-shadow: none !important; background: transparent !important; }
+  @page { margin: 0; size: A4; }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 700px) {
+  .resume-page { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
+  .sidebar { grid-column: 1; grid-row: 1; }
+  .main-header { grid-column: 1; grid-row: 2; }
+  .main-body { grid-column: 1; grid-row: 3; }
+  .achievements-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── TOAST ─── */
+#toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: #1a1a2e;
+  color: #e8e6f0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 6px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 9999;
+}
+#toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     TOOLBAR
+══════════════════════════════ -->
+<div id="toolbar" role="toolbar" aria-label="Resume editor toolbar">
+  <span class="tb-brand">⚡ Resume Editor</span>
+
+  <button class="tb-btn" id="btn-edit" onclick="toggleEdit()" title="Enable inline editing on the resume">
+    <span id="edit-icon">✏️</span>
+    <span id="edit-label">Edit Resume</span>
+  </button>
+
+  <button class="tb-btn" id="btn-save" onclick="forceSave()" title="Save changes now">
+    💾 Save Now
+  </button>
+
+  <span id="save-status" class="hidden"></span>
+  <span id="edit-hint" class="hidden">Click any text on the resume to edit it</span>
+
+  <div class="tb-spacer"></div>
+
+  <button class="tb-btn" id="btn-export" onclick="exportHTML()" title="Download a standalone HTML file of your resume">
+    ⬇️ Export HTML
+  </button>
+
+  <button class="tb-btn" id="btn-reset" onclick="confirmReset()" title="Reset to original saved version">
+    ↩ Reset
+  </button>
+
+  <button class="tb-btn" id="btn-print" onclick="window.print()" style="background:#1a1a2e;color:#e8e6f0;border:1px solid rgba(255,255,255,0.12);" title="Print or save as PDF">
+    🖨️ Print / PDF
+  </button>
+</div>
+
+<div id="toast"></div>
+
+<!-- ══════════════════════════════
+     RESUME PAGE
+══════════════════════════════ -->
+<article class="resume-page" id="resume-page" role="main" aria-label="Resume of Likhit Verma">
+
+  <!-- ════════════ SIDEBAR ════════════ -->
+  <aside class="sidebar" id="sidebar" aria-label="Contact and skills">
+
+    <div>
+      <h1 class="s-name" id="ce-name">Likhit<br>Verma</h1>
+      <p class="s-title" id="ce-title">Software Engineer II</p>
+    </div>
+
+    <!-- Contact -->
+    <div>
+      <p class="s-section-label">Contact</p>
+      <ul class="contact-list">
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .94h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+          <span id="ce-phone">+91 860 413 0052</span>
+        </li>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span id="ce-email"><a href="mailto:likhit.vermacs@gmail.com">likhit.vermacs@gmail.com</a></span>
+        </li>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          <span id="ce-linkedin"><a href="https://linkedin.com/in/likhit-verma-cs/" target="_blank" rel="noopener">linkedin.com/in/likhit-verma-cs</a></span>
+        </li>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          <span id="ce-portfolio"><a href="https://likhitverma.github.io/portfolio/" target="_blank" rel="noopener">likhitverma.github.io/portfolio</a></span>
+        </li>
+        <li>
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span id="ce-location">Noida, India</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Skills -->
+    <div>
+      <p class="s-section-label">Skills</p>
+      <div class="skill-group">
+        <p class="skill-group-label">Frontend</p>
+        <div class="skill-tags" id="ce-skills-frontend">
+          <span class="skill-tag">React.js</span><span class="skill-tag">Redux</span><span class="skill-tag">Redux Saga</span><span class="skill-tag">Zustand</span><span class="skill-tag">TypeScript</span><span class="skill-tag">JavaScript ES6+</span><span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">SCSS/SASS</span><span class="skill-tag">Tailwind CSS</span><span class="skill-tag">Material UI</span><span class="skill-tag">Daisy UI</span><span class="skill-tag">Custom Hooks</span><span class="skill-tag">Responsive Design</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-label">Backend</p>
+        <div class="skill-tags" id="ce-skills-backend">
+          <span class="skill-tag">Node.js</span><span class="skill-tag">Express.js</span><span class="skill-tag">RESTful APIs</span><span class="skill-tag">GraphQL</span><span class="skill-tag">MongoDB</span><span class="skill-tag">Mongoose</span><span class="skill-tag">AWS</span><span class="skill-tag">Nginx</span><span class="skill-tag">SQL</span><span class="skill-tag">Redis</span><span class="skill-tag">JWT Auth</span><span class="skill-tag">OAuth2</span><span class="skill-tag">Docker</span><span class="skill-tag">Kubernetes</span><span class="skill-tag">SignalR</span><span class="skill-tag">SonarQube</span><span class="skill-tag">Azure App Insights</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-label">Testing</p>
+        <div class="skill-tags" id="ce-skills-testing">
+          <span class="skill-tag">Jest</span><span class="skill-tag">Enzyme</span><span class="skill-tag">React Testing Library</span><span class="skill-tag">TDD</span><span class="skill-tag">BDD Cucumber</span><span class="skill-tag">Unit Testing</span><span class="skill-tag">E2E Testing</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-label">DevOps &amp; Tools</p>
+        <div class="skill-tags" id="ce-skills-devops">
+          <span class="skill-tag">Git</span><span class="skill-tag">Bitbucket</span><span class="skill-tag">Azure DevOps</span><span class="skill-tag">CI/CD Pipelines</span><span class="skill-tag">Webpack</span><span class="skill-tag">Babel</span><span class="skill-tag">Postman</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-label">Management</p>
+        <div class="skill-tags" id="ce-skills-mgmt">
+          <span class="skill-tag">Agile</span><span class="skill-tag">Scrum</span><span class="skill-tag">Jira</span><span class="skill-tag">Leadership</span><span class="skill-tag">Team Mentoring</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-label">Soft Skills</p>
+        <div class="skill-tags" id="ce-skills-soft">
+          <span class="skill-tag">Problem Solving</span><span class="skill-tag">Communication</span><span class="skill-tag">Documentation</span><span class="skill-tag">Teamwork</span><span class="skill-tag">Client Collaboration</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div>
+      <p class="s-section-label">Education</p>
+      <div>
+        <p class="s-edu-school" id="ce-edu-school">Raj Kumar Goel Institute of Technology</p>
+        <p class="s-edu-degree" id="ce-edu-degree">B.Tech — Computer Science &amp; Engineering</p>
+        <p class="s-edu-meta" id="ce-edu-meta">Ghaziabad, UP &nbsp;·&nbsp; 2015 – 2019</p>
+      </div>
+    </div>
+
+    <!-- Languages -->
+    <div>
+      <p class="s-section-label">Languages</p>
+      <ul class="lang-list" id="ce-languages">
+        <li><span class="lang-dot"></span><span>English</span></li>
+        <li><span class="lang-dot"></span><span>Hindi</span></li>
+      </ul>
+    </div>
+
+  </aside>
+
+  <!-- ════════════ MAIN HEADER ════════════ -->
+  <header class="main-header">
+    <p class="summary-tagline" id="ce-tagline">Senior Full Stack Engineer &nbsp;|&nbsp; MERN Stack Specialist</p>
+    <p class="summary-body" id="ce-summary">6+ years building high-performance, scalable web applications for Fortune 500 clients including American Express, Honeywell, and DISA. Passionate problem-solver and dedicated team player driving impactful results.</p>
+  </header>
+
+  <!-- ════════════ MAIN BODY ════════════ -->
+  <main class="main-body">
+
+    <!-- Experience -->
+    <section class="section" aria-labelledby="exp-heading">
+      <h2 class="section-heading" id="exp-heading">Experience</h2>
+
+      <!-- Concentrix Catalyst -->
+      <div class="exp-entry">
+        <div class="exp-top">
+          <span class="exp-company" id="ce-co1-name">Concentrix Catalyst</span>
+          <span class="exp-location-date" id="ce-co1-meta">Bengaluru, India &nbsp;·&nbsp; 11/2025 – Present</span>
+        </div>
+        <div class="exp-role-row">
+          <span class="exp-role" id="ce-co1-role">Software Engineer II</span>
+          <span class="role-badge">Current</span>
+        </div>
+        <p class="exp-desc" id="ce-co1-desc">Global technology and services leader powering the world's best brands with end-to-end integrated solutions for 2,000+ clients.</p>
+        <ul class="exp-bullets" id="ce-co1-bullets">
+          <li>Resolved critical security vulnerabilities using Helmet.js security headers, Express-validator input sanitization, and homoglyph attack prevention achieving full SDE compliance.</li>
+          <li>Fixed hardware simulator UI defects and developed JSON server data persistence feature, improving application reliability and user experience.</li>
+          <li>Designed and implemented encryption POC for securing Node-RED flow credentials using AES-256-GCM encryption, protecting sensitive authentication keys and data fields.</li>
+          <li>Delivered major UI enhancements across the application, resolving rendering issues, improving responsiveness, and reducing user-reported defects by 40%.</li>
+          <li>Architected SQLite + MQTT + RDTS integration POC and developed custom Node-RED nodes for real-time IoT data processing with message-driven persistence architecture.</li>
+          <li>Authored BDD test cases using Cucumber.js and developed RESTful APIs with Express.js, implementing authentication, validation, and error handling middleware.</li>
+        </ul>
+      </div>
+
+      <hr class="exp-divider"/>
+
+      <!-- GlobalLogic -->
+      <div class="exp-entry">
+        <div class="exp-top">
+          <span class="exp-company" id="ce-co2-name">GlobalLogic India Pvt. Ltd</span>
+          <span class="exp-location-date" id="ce-co2-meta">Noida, India &nbsp;·&nbsp; 04/2022 – 11/2025</span>
+        </div>
+        <div class="exp-role-row">
+          <span class="exp-role" id="ce-co2-role">Software Engineer</span>
+        </div>
+        <p class="exp-desc" id="ce-co2-desc">Leading digital transformation company empowering organizations to streamline software development processes.</p>
+        <ul class="exp-bullets" id="ce-co2-bullets">
+          <li>Migrated over 100,000 lines from ASP.NET to MERN stack (MongoDB, Express, React, Node), improving performance by 321%.</li>
+          <li>Designed and implemented scalable RESTful APIs with Node.js and Express.js for secure, high-performance data flow.</li>
+          <li>Integrated MongoDB with efficient schema design, indexes, and aggregation pipelines, reducing query time by 40%.</li>
+          <li>Followed TDD using Jest and Enzyme, achieving 95% unit test coverage and production-ready code quality.</li>
+          <li>Delivered responsive React.js interfaces with seamless API integration and cross-browser compatibility.</li>
+          <li>Automated deployment pipelines through Bitbucket and CI/CD to enhance release reliability.</li>
+          <li>Guided a 9-member team as Proxy Lead, promoting best practices and code quality improvements.</li>
+          <li>Applied Domain-Driven Design (DDD) for modular structuring, improving maintainability and code reuse by 50%.</li>
+          <li>Integrated Azure App Insights and SonarQube to monitor Node.js performance and ensure coding standards.</li>
+          <li>Engineered real-time notifications using SignalR, Node.js, and React hooks, optimizing UI responsiveness.</li>
+          <li>Collaborated with US clients to define business requirements and manage JIRA stories for timely sprint delivery.</li>
+        </ul>
+      </div>
+
+      <hr class="exp-divider"/>
+
+      <!-- PureSoftware -->
+      <div class="exp-entry">
+        <div class="exp-top">
+          <span class="exp-company" id="ce-co3-name">PureSoftware Pvt. Ltd</span>
+          <span class="exp-location-date" id="ce-co3-meta">Noida, India &nbsp;·&nbsp; 06/2019 – 06/2021</span>
+        </div>
+        <div class="exp-role-row">
+          <span class="exp-role" id="ce-co3-role">Software Engineer</span>
+        </div>
+        <p class="exp-desc" id="ce-co3-desc">Innovative technology solutions company delivering expert software development services.</p>
+        <ul class="exp-bullets" id="ce-co3-bullets">
+          <li>Contributed to the development of a responsive web app, resulting in a user base of over 1,500 active users within two months.</li>
+          <li>Enhanced user engagement by 15% through A/B testing and data-driven UI design changes analysis.</li>
+          <li>Leveraged JavaScript ES6 to optimize critical sections of the codebase, resulting in a 15% improvement in application speed.</li>
+          <li>Developed a Single Page Application (SPA) for a better user experience.</li>
+          <li>Utilised Bitbucket for version control and code collaboration, ensuring seamless integration with continuous integration tools.</li>
+          <li>Worked in an internationally distributed team and with a US client, collaborating on exact solution requirements.</li>
+          <li>Implemented comprehensive unit tests using Jest and Enzyme, reducing the defect rate by 20%.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Key Achievements -->
+    <section class="section" aria-labelledby="ach-heading">
+      <h2 class="section-heading" id="ach-heading">Key Achievements</h2>
+      <div class="achievements-grid" id="ce-achievements">
+        <div class="ach-item">Spotlight of the Month — Concentrix Catalyst (Jan 2026)</div>
+        <div class="ach-item">Star Performer Award Twice — GlobalLogic (2024 &amp; 2025)</div>
+        <div class="ach-item">Client Appreciation Award — GlobalLogic (Apr 2024)</div>
+        <div class="ach-item">Spotlight of the Month — GlobalLogic (Jan 2023)</div>
+        <div class="ach-item">Bingo Award — PureSoftware (Feb 2020)</div>
+        <div class="ach-item">Led migration of 100K+ lines, improving performance by 321%</div>
+        <div class="ach-item">Led a cross-functional team of 9 members as Proxy Lead</div>
+      </div>
+    </section>
+
+  </main>
+
+</article>
+
+<!-- ══════════════════════════════
+     JAVASCRIPT — Edit + Save System
+══════════════════════════════ -->
+<script>
+(function () {
+  "use strict";
+
+  /* ── Config ── */
+  const STORAGE_KEY  = 'likhit_resume_v2';
+  const DEBOUNCE_MS  = 1200;   // auto-save delay after typing stops
+
+  /* ── State ── */
+  let editMode    = false;
+  let saveTimer   = null;
+  let isDirty     = false;
+
+  /* ── All editable element IDs ── */
+  const EDITABLE_IDS = [
+    'ce-name','ce-title',
+    'ce-phone','ce-email','ce-linkedin','ce-portfolio','ce-location',
+    'ce-skills-frontend','ce-skills-backend','ce-skills-testing',
+    'ce-skills-devops','ce-skills-mgmt','ce-skills-soft',
+    'ce-edu-school','ce-edu-degree','ce-edu-meta',
+    'ce-languages',
+    'ce-tagline','ce-summary',
+    'ce-co1-name','ce-co1-meta','ce-co1-role','ce-co1-desc','ce-co1-bullets',
+    'ce-co2-name','ce-co2-meta','ce-co2-role','ce-co2-desc','ce-co2-bullets',
+    'ce-co3-name','ce-co3-meta','ce-co3-role','ce-co3-desc','ce-co3-bullets',
+    'ce-achievements'
+  ];
+
+  /* ── DOM refs ── */
+  const resumePage   = document.getElementById('resume-page');
+  const sidebar      = document.getElementById('sidebar');
+  const btnEdit      = document.getElementById('btn-edit');
+  const btnSave      = document.getElementById('btn-save');
+  const saveStatus   = document.getElementById('save-status');
+  const editHint     = document.getElementById('edit-hint');
+  const editIcon     = document.getElementById('edit-icon');
+  const editLabel    = document.getElementById('edit-label');
+
+  /* ════════════════════════════
+     INIT — restore from storage
+  ════════════════════════════ */
+  function init() {
+    const saved = loadFromStorage();
+    if (saved) {
+      applySnapshot(saved);
+      setStatus('saved', '✓ Last save restored');
+      setTimeout(() => setStatus('hidden'), 2500);
+    }
+  }
+
+  /* ════════════════════════════
+     TOGGLE EDIT MODE
+  ════════════════════════════ */
+  window.toggleEdit = function () {
+    editMode = !editMode;
+
+    EDITABLE_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (editMode) {
+        el.setAttribute('contenteditable', 'true');
+        el.setAttribute('spellcheck', 'true');
+      } else {
+        el.removeAttribute('contenteditable');
+        el.removeAttribute('spellcheck');
+      }
+    });
+
+    if (editMode) {
+      resumePage.classList.add('edit-mode');
+      sidebar.classList.add('edit-mode-sidebar');
+      btnEdit.classList.add('active');
+      editIcon.textContent = '🔒';
+      editLabel.textContent = 'Stop Editing';
+      btnSave.classList.add('visible');
+      editHint.classList.add('visible');
+      showToast('Edit mode ON — click any text to edit');
+    } else {
+      resumePage.classList.remove('edit-mode');
+      sidebar.classList.remove('edit-mode-sidebar');
+      btnEdit.classList.remove('active');
+      editIcon.textContent = '✏️';
+      editLabel.textContent = 'Edit Resume';
+      editHint.classList.remove('visible');
+      if (!isDirty) btnSave.classList.remove('visible');
+      showToast('Edit mode OFF');
+    }
+  };
+
+  /* ════════════════════════════
+     INPUT LISTENER — debounced save
+  ════════════════════════════ */
+  document.getElementById('resume-page').addEventListener('input', function () {
+    if (!editMode) return;
+    isDirty = true;
+    btnSave.classList.add('visible');
+    setStatus('unsaved', '● Unsaved changes');
+
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      autoSave();
+    }, DEBOUNCE_MS);
+  });
+
+  /* ════════════════════════════
+     AUTO SAVE
+  ════════════════════════════ */
+  function autoSave() {
+    setStatus('saving', '⟳ Saving…');
+    const snapshot = captureSnapshot();
+    saveToStorage(snapshot);
+
+    setTimeout(function () {
+      isDirty = false;
+      setStatus('saved', '✓ Saved automatically');
+    }, 300);
+  }
+
+  /* ════════════════════════════
+     FORCE SAVE (button)
+  ════════════════════════════ */
+  window.forceSave = function () {
+    clearTimeout(saveTimer);
+    autoSave();
+    showToast('💾 Saved!');
+  };
+
+  /* ════════════════════════════
+     SNAPSHOT — capture / apply
+  ════════════════════════════ */
+  function captureSnapshot() {
+    const snap = {};
+    EDITABLE_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) snap[id] = el.innerHTML;
+    });
+    return snap;
+  }
+
+  function applySnapshot(snap) {
+    EDITABLE_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && snap[id] !== undefined) el.innerHTML = snap[id];
+    });
+  }
+
+  /* ════════════════════════════
+     STORAGE
+  ════════════════════════════ */
+  function saveToStorage(snap) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(snap));
+    } catch(e) {
+      showToast('⚠️ Storage full — use Export HTML instead');
+    }
+  }
+
+  function loadFromStorage() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch(e) { return null; }
+  }
+
+  /* ════════════════════════════
+     RESET
+  ════════════════════════════ */
+  window.confirmReset = function () {
+    if (!confirm('Reset all edits and restore the original content?\n\nThis cannot be undone.')) return;
+
+    // Clear storage
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+
+    // Reload page
+    showToast('Resetting…');
+    setTimeout(() => location.reload(), 500);
+  };
+
+  /* ════════════════════════════
+     EXPORT HTML
+     Produces a standalone, self-contained HTML file —
+     no external CSS/JS dependencies, all edits baked in,
+     with a unique timestamp in the filename.
+  ════════════════════════════ */
+  window.exportHTML = function () {
+    // Make sure latest edits are in snapshot even if not saved
+    const snap = captureSnapshot();
+    applySnapshot(snap);
+
+    // Clone the resume page node
+    const clone = document.getElementById('resume-page').cloneNode(true);
+
+    // Remove contenteditable attributes from clone
+    clone.querySelectorAll('[contenteditable]').forEach(el => {
+      el.removeAttribute('contenteditable');
+      el.removeAttribute('spellcheck');
+    });
+    clone.classList.remove('edit-mode');
+    clone.querySelector('#sidebar') && clone.querySelector('#sidebar').classList.remove('edit-mode-sidebar');
+
+    // Grab all <style> blocks from current page
+    const styles = Array.from(document.querySelectorAll('style'))
+      .map(s => s.outerHTML).join('\n');
+
+    // Build timestamp for filename
+    const now   = new Date();
+    const pad   = n => String(n).padStart(2,'0');
+    const stamp = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+    const fname = `Likhit_Verma_Resume_${stamp}.html`;
+
+    // Full HTML string (no external deps — fonts via Google CDN only)
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Likhit Verma — Resume</title>
+<meta name="description" content="Resume of Likhit Verma, Senior Full Stack Engineer | MERN Stack Specialist"/>
+<meta name="author" content="Likhit Verma"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+${styles}
+<style>
+  body { background:#d6d3cc; padding: 40px 20px 60px; }
+  #toolbar, #toast { display: none !important; }
+  @media print {
+    body { background: white; padding: 0; }
+    .resume-page { box-shadow: none; }
+    @page { margin: 0; size: A4; }
+  }
+</style>
+</head>
+<body>
+${clone.outerHTML}
+</body>
+</html>`;
+
+    // Trigger download
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = fname;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+
+    showToast(`⬇️ Exported as ${fname}`);
+  };
+
+  /* ════════════════════════════
+     UI HELPERS
+  ════════════════════════════ */
+  function setStatus(state, text) {
+    saveStatus.className = '';
+    if (state === 'hidden') {
+      saveStatus.classList.add('hidden');
+      return;
+    }
+    saveStatus.classList.add(state);
+    saveStatus.textContent = text || '';
+  }
+
+  let toastTimer = null;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  /* ── Keyboard shortcuts ── */
+  document.addEventListener('keydown', function (e) {
+    // Ctrl/Cmd + S → force save
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 's') {
+      if (editMode) { e.preventDefault(); forceSave(); }
+    }
+    // Ctrl/Cmd + E → toggle edit
+    if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+      e.preventDefault(); toggleEdit();
+    }
+  });
+
+  /* ── Page unload warning ── */
+  window.addEventListener('beforeunload', function (e) {
+    if (isDirty) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+
+  /* ── Boot ── */
+  init();
+
+})();
+</script>
+</body>
+</html>
